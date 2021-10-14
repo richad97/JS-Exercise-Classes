@@ -7,6 +7,8 @@
         + If a plane lands, its `isFlying` property gets set to false.
 */
 
+const { thisTypeAnnotation } = require("@babel/types");
+
 // EXAMPLE SOLUTION CODE:
 class Airplane {
   constructor(name) {
@@ -47,7 +49,9 @@ class Person {
     this.stomach = [];
   }
   eat(food) {
-    this.stomach.push(food);
+    if (this.stomach.length < 10) {
+      this.stomach.push(food);
+    }
   }
   poop() {
     this.stomach = [];
@@ -82,8 +86,15 @@ class Car {
     this.tank += gallons;
   }
   drive(distance) {
-    this.odometer += distance;
-    //  this.tank -= this.milesPerGallon
+    const drivableMiles = this.tank * this.milesPerGallon;
+    if (distance <= drivableMiles) {
+      this.odometer += distance;
+      this.tank -= distance / this.milesPerGallon;
+    } else {
+      this.odometer += drivableMiles;
+      this.tank = 0;
+      return `I ran out of fuel at ${this.odometer} miles`;
+    }
   }
 }
 
